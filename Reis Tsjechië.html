@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vakantie Tijdslijn - Centraal-Europa Reis</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        font-weight: 300;
+      }
+
+      .header .subtitle {
+        font-size: 1.2em;
+        opacity: 0.9;
+      }
+
+      .timeline {
+        position: relative;
+        padding: 40px 20px;
+      }
+
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 30px;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: linear-gradient(
+          to bottom,
+          #3498db,
+          #2ecc71,
+          #f39c12,
+          #e74c3c
+        );
+      }
+
+      .day {
+        position: relative;
+        margin-bottom: 40px;
+        width: 100%;
+      }
+
+      .day-content {
+        margin-left: 70px;
+        text-align: left;
+      }
+
+      .day-marker {
+        position: absolute;
+        left: 22px;
+        width: 20px;
+        height: 20px;
+        background: white;
+        border: 4px solid #3498db;
+        border-radius: 50%;
+        z-index: 2;
+      }
+
+      .day-content {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border-left: 5px solid #3498db;
+        position: relative;
+      }
+
+      .day-header {
+        margin-bottom: 20px;
+      }
+
+      .day-title {
+        font-size: 1.4em;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 5px;
+      }
+
+      .day-date {
+        color: #7f8c8d;
+        font-size: 0.95em;
+      }
+
+      .route {
+        margin: 15px 0;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        border-left: 4px solid #e74c3c;
+      }
+
+      .transport {
+        display: inline-flex;
+        align-items: center;
+        margin: 8px 5px;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        font-weight: 500;
+      }
+
+      .train {
+        background: #3498db;
+        color: white;
+      }
+
+      .bus {
+        background: #e67e22;
+        color: white;
+      }
+
+      .walk {
+        background: #2ecc71;
+        color: white;
+      }
+
+      .stay {
+        background: #9b59b6;
+        color: white;
+      }
+
+      .time {
+        font-weight: 600;
+        color: #e74c3c;
+        margin-right: 8px;
+      }
+
+      .station {
+        font-weight: 500;
+        color: #2c3e50;
+      }
+
+      .details {
+        font-size: 0.9em;
+        color: #7f8c8d;
+        margin-top: 5px;
+      }
+
+      .accommodation {
+        background: #ecf0f1;
+        padding: 12px;
+        border-radius: 8px;
+        margin-top: 10px;
+        border-left: 4px solid #9b59b6;
+      }
+
+      .tips {
+        background: #f0f7fa;
+        padding: 12px 18px;
+        border-radius: 8px;
+        margin-top: 12px;
+        border-left: 4px solid #3498db;
+      }
+      .tips h4 {
+        margin-bottom: 8px;
+        color: #2c3e50;
+        font-size: 1.08em;
+      }
+      .tips ul {
+        margin-left: 0;
+        padding-left: 18px;
+      }
+      .tips li {
+        margin-bottom: 18px;
+        font-size: 0.98em;
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+      }
+      .tip-img {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+        flex-shrink: 0;
+      }
+      }
+
+      .activities {
+        background: #e8f5e8;
+        padding: 12px;
+        border-radius: 8px;
+        margin-top: 10px;
+        border-left: 4px solid #2ecc71;
+      }
+
+      .warning {
+        background: #fff3cd;
+        color: #856404;
+        padding: 10px;
+        border-radius: 6px;
+        margin-top: 8px;
+        font-size: 0.85em;
+        border-left: 4px solid #ffc107;
+      }
+
+      .travel-day {
+        border-left-color: #e74c3c;
+      }
+
+      .stay-day {
+        border-left-color: #9b59b6;
+      }
+
+      .legend {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: 30px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 15px;
+      }
+
+      .photo-gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-top: 15px;
+      }
+
+      .photo-item {
+        position: relative;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease;
+      }
+
+      .photo-item:hover {
+        transform: translateY(-5px);
+      }
+
+      .photo-item img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+      }
+
+      .photo-caption {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+        color: white;
+        padding: 15px 10px 8px;
+        font-size: 0.85em;
+        font-weight: 500;
+      }
+
+      @media (max-width: 768px) {
+        .day-content {
+          margin-left: 50px;
+        }
+
+        .day-marker {
+          left: 15px;
+        }
+
+        .timeline::before {
+          left: 23px;
+        }
+
+        .header h1 {
+          font-size: 2em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🚄 Centraal-Europa Reis</h1>
+        <div class="subtitle">13 dagen | 28 juli - 9 augustus 2025</div>
+      </div>
+
+      <div class="timeline">
+        <!-- Dag 1 -->
+        <div class="day">
+          <div class="day-marker"></div>
+          <div class="day-content travel-day">
+            <div class="day-header">
+              <div class="day-title">Dag 1 - Reisdag naar Praag</div>
+              <div class="day-date">Maandag 28 juli 2025</div>
+            </div>
+
+            <div class="route">
+              <div>
+                <span class="time">07:00</span>
+                <span class="station">Vertrek Antwerpen Zuid</span> → Antwerpen
+                Centraal
+              </div>
+              <div>
+                <span class="time">07:25</span>
+                <span class="station">Antwerpen Centraal</span> → Brussel Noord
+                <span class="transport train">🚄 TREIN</span>
+              </div>
+              <div class="details">16 minuten overstaptijd, spoor 23</div>
+
+              <div>
+                <span class="time">08:34</span>
+                <span class="station">Brussel Noord</span> → Frankfurt
+                <span class="transport train">🚄 ICE 13</span>
+              </div>
+              <div class="details">
+                Spoor 2, wagon 23, plaatsen 81,82,85,86 - 34 min overstaptijd
+              </div>
+
+              <div>
+                <span class="time">11:54</span>
+                <span class="station">Frankfurt</span> → Nürnberg
+                <span class="transport train">🚄 ICE 623</span>
+              </div>
+              <div class="details">
+                Spoor 7, wagon 23, plaatsen 52,54,61,63 - 23 min overstaptijd
+              </div>
+
+              <div>
+                <span class="time">14:37</span>
+                <span class="station">Nürnberg</span> → Cheb
+                <span class="transport train">🚄 RE 33</span>
+              </div>
+              <div class="details">Spoor 21 - 33 min overstaptijd</div>
+
+              <div>
+                <span class="time">16:33</span>
+                <span class="station">Cheb</span> → Praag
+                <span class="transport train">🚄 IC 563</span>
+              </div>
+              <div class="details">12 min overstaptijd</div>
+
+              <div>
+                <span class="time">19:22</span>
+                <span class="station">Aankomst Praag</span>
+              </div>
+            </div>
+
+            <div class="warning">
+              ⚠️ Noodplannen: Frankfurt gemist → IC 27 (12:22) of IC 625
+              (12:54)<br />
+              Cheb gemist → SP 1671 (17:19) via Plzen of volgende trein (18:33)
+            </div>
+
+            <div class="accommodation">
+              🏨 <strong>Hotel Victoria</strong>, Seifertova 26, Praag<br />
+              <em>Let op: Receptie sluit om 18:30, inchecken met pincode</em>
+            </div>
+
+            <div class="photo-gallery">
+              <div class="photo-item">
+                <a
+                  href="https://www.google.com/search?tbm=isch&q=Hotel+Victoria+Prague+Hotel+Victoria"
+                  target="external"
+                >
+                  <img
+                    src="https://lh3.googleusercontent.com/p/AF1QipMrgKEVOsmkOLo3teAvgDnXN3sSilrtnL3c1RXj=s1360-w1360-h1020-rw"
+                    alt="Hotel Victoria Prague"
+                  />
+                </a>
+                <div class="photo-caption">Hotel Victoria</div>
+              </div>
+              <div class="photo-item">
+                <a
+                  href="https://www.google.com/search?tbm=isch&q=Prague+Castle+Praagse+Burcht"
+                  target="external"
+                >
+                  <img
+                    src="https://images.unsplash.com/photo-1541849546-216549ae216d?w=400&h=300&fit=crop"
+                    alt="Prague Castle"
+                  />
+                </a>
+                <div class="photo-caption">Praagse Burcht</div>
+              </div>
+              <div class="photo-item">
+                <a
+                  href="https://www.google.com/search?tbm=isch&q=Charles+Bridge+Prague+Karelsbrug"
+                  target="external"
+                >
+                  <img
+                    src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=400&h=300&fit=crop"
+                    alt="Charles Bridge Prague"
+                  />
+                </a>
+                <div class="photo-caption">Karelsbrug</div>
+              </div>
+            </div>
+          </div>
+          <div class="tips">
+            <h4>Uitstappen & Tips</h4>
+            <ul>
+              <li>
+                <img
+                  class="tip-img"
+                  src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4npQLXyrL7tCsP9Zoi7UfK0xH-6RFJkx4PUsKLviS4hvaln7UQGsUdv2aXT3GtxVPd7uEEJ0iR4tVDX9XI-uxq0ixQWgEmCR9e1wkEo4w7dkc0xZrFpXX43d8EQzSJ0JCXWHERxMHigkXyt-=s1360-w1360-h1020-rw"
+                  alt="Mucha Museum"
+                />
+                <div>
+                  <strong>Mucha Museum</strong> – Museum gewijd aan de
+                  Tsjechische art-nouveau kunstenaar Alphonse Mucha.<br /><em
+                    >Afstand:</em
+                  >
+                  1,9 km vanaf Hotel Victoria<br /><em>Vervoer:</em> 25 min
+                  lopen of 10-15 min OV<br /><a
+                    href="https://www.google.com/maps/search/Mucha+Museum+Prague"
+                    target="_blank"
+                    >Google Maps</a
+                  >
+                </div>
+              </li>
+              <li>
+                <img
+                  class="tip-img"
+                  src="https://cdn.praguecitytourism.city/2024/03/13101933/01-stm-radnice-0288ret-m.jpg"
+                  alt="Oude Stadsplein"
+                />
+                <div>
+                  <strong>Oude Stadsplein</strong> – Historisch plein met
+                  astronomisch uurwerk en gezellige sfeer.<br /><em
+                    >Afstand:</em
+                  >
+                  2,2 km vanaf Hotel Victoria<br /><em>Vervoer:</em> 28 min
+                  lopen of 15-20 min OV<br /><a
+                    href="https://www.google.com/maps/search/Oude+Stadsplein+Prague"
+                    target="_blank"
+                    >Google Maps</a
+                  >
+                </div>
+              </li>
+              <li>
+                <img
+                  class="tip-img"
+                  src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=400&h=300&fit=crop"
+                  alt="Karelsbrug"
+                />
+                <div>
+                  <strong>Karelsbrug</strong> – Beroemde brug met beelden en
+                  uitzicht over de Moldau.<br /><em>Afstand:</em> 3,0 km vanaf
+                  Hotel Victoria<br /><em>Vervoer:</em> 38 min lopen of 20-25
+                  min OV<br /><a
+                    href="https://www.google.com/maps/search/Karelsbrug+Prague"
+                    target="_blank"
+                    >Google Maps</a
+                  >
+                </div>
+              </li>
+              <li>
+                <img
+                  class="tip-img"
+                  src="https://images.unsplash.com/photo-1541849546-216549ae216d?w=400&h=300&fit=crop"
+                  alt="Praagse Burcht"
+                />
+                <div>
+                  <strong>Praagse Burcht</strong> – Groot kasteelcomplex met
+                  kathedraal en tuinen.<br /><em>Afstand:</em> 4,0 km vanaf
+                  Hotel Victoria<br /><em>Vervoer:</em> 50 min lopen of 25-30
+                  min OV<br /><a
+                    href="https://www.google.com/maps/search/Praagse+Burcht+Prague"
+                    target="_blank"
+                    >Google Maps</a
+                  >
+                </div>
+              </li>
+              <li>
+                <img
+                  class="tip-img"
+                  src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&h=300&fit=crop"
+                  alt="Petřín Heuvel"
+                />
+                <div>
+                  <strong>Petřín Heuvel & Uitkijktoren</strong> – Park en
+                  uitkijktoren met panoramisch uitzicht.<br /><em>Afstand:</em>
+                  3,7 km vanaf Hotel Victoria<br /><em>Vervoer:</em> 45 min
+                  lopen of 25-30 min OV<br /><a
+                    href="https://www.google.com/maps/search/Petrin+Heuvel+Prague"
+                    target="_blank"
+                    >Google Maps</a
+                  >
+                </div>
+              </li>
+              <li>
+                <img
+                  class="tip-img"
+                  src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4npQLXyrL7tCsP9Zoi7UfK0xH-6RFJkx4PUsKLviS4hvaln7UQGsUdv2aXT3GtxVPd7uEEJ0iR4tVDX9XI-uxq0ixQWgEmCR9e1wkEo4w7dkc0xZrFpXX43d8EQzSJ0JCXWHERxMHigkXyt-=s1360-w1360-h1020-rw"
+                  alt="Joodse Wijk"
+                />
+                <div>
+                  <strong>Joodse Wijk (Josefov)</strong> – Historische wijk met
+                  synagogen en begraafplaats.<br /><em>Afstand:</em> 2,5 km
+                  vanaf Hotel Victoria<br /><em>Vervoer:</em> 32 min lopen of
+                  15-20 min OV<br /><a
+                    href="https://www.google.com/maps/search/Joodse+Wijk+Josefov+Prague"
+                    target="_blank"
+                    >Google Maps</a
+                  >
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Dag 2 -->
+        <div class="day">
+          <div class="day-marker"></div>
+          <div class="day-content stay-day">
+            <div class="day-header">
+              <div class="day-title">Dag 2 - Praag Verkennen</div>
+              <div class="day-date">Dinsdag 29 juli 2025</div>
+            </div>
+
+            <div class="accommodation">
+              🏨 <strong>Hotel Victoria</strong>
+              <span class="transport stay">🛏️ VERBLIJF</span>
+            </div>
+
+            <div class="activities">
+              🎨 <strong>Activiteiten:</strong> Mucha Museum bezoeken
+            </div>
+
+            <div class="photo-gallery">
+              <div class="photo-item">
+                <a
+                  href="https://www.google.com/search?tbm=isch&q=Mucha+Museum+Prague+Mucha+Museum"
+                  target="external"
+                >
+                  <img
+                    src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4npQLXyrL7tCsP9Zoi7UfK0xH-6RFJkx4PUsKLviS4hvaln7UQGsUdv2aXT3GtxVPd7uEEJ0iR4tVDX9XI-uxq0ixQWgEmCR9e1wkEo4w7dkc0xZrFpXX43d8EQzSJ0JCXWHERxMHigkXyt-=s1360-w1360-h1020-rw"
+                    alt="Mucha Museum Prague"
+                  />
+                </a>
+                <div class="photo-caption">Mucha Museum</div>
+              </div>
+              <div class="photo-item">
+                <a
+                  href="https://www.google.com/search?tbm=isch&q=Old+Town+Square+Prague+Oude+Stadsplein"
+                  target="external"
+                >
+                  <img
+                    src="https://cdn.praguecitytourism.city/2024/03/13101933/01-stm-radnice-0288ret-m.jpg"
+                    alt="Old Town Square Prague"
+                  />
+                </a>
+                <div class="photo-caption">Oude Stadsplein</div>
+              </div>
+            </div>
+          </div>
+          <div class="tips">
+            <h4>Uitstappen & Tips</h4>
+            <ul>
+              <li>
+                <img
+                  class="tip-img"
+                  src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4nrpvNPPjv1LYkLIulj0sjW6ze2CQP0zQCrFW6B90EUUwFgZhucXUyLZyKVWOPR44bI4v8jzqfqDMmjGXtwz770VqEIW_IYNCh4ZF2WACXO6dx-yMwoL_Y8LkNavk5zUw2I7cg8=s1360-w1360-h1020-rw"
+                  alt="Špilberk Kasteel"
+                />
+                <div>
+                  <strong>Špilberk Kasteel</strong> – Historisch kasteel met
+                  museum en uitzicht over Brno.<br /><em>Afstand:</em> 1,0 km
+                  vanaf Hotel Royal Ricc<br /><em>Vervoer:</em> 13 min lopen<br /><a
+                    href="https://www.google.com/maps/search/Spilberk+Kasteel+Brno"
+                    target="_blank"
+                    >Google Maps</a
+                  >
+                </div>
+              </li>
+              <li>
+                <img
+                  class="tip-img"
+                  src="https://images.unsplash.com/photo-1655910843284-68e2a2f37f47?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3ODM4ODR8MHwxfHNlYXJjaHwyfHxPdWRlJTIwU3RhZGh1aXN8ZW58MHx8fHwxNzUzNjM5ODY1fDA&ixlib=rb-4.1.0&q=80&w=1080"
+                  alt="Oude Stadhuis"
+                />
+                <div>
+                  <strong>Oude Stadhuis</strong> – Middeleeuws stadhuis met
+                  toren en drakensymbool.<br /><em>Afstand:</em> 0,2 km vanaf
+                  Hotel Royal Ricc<br /><em>Vervoer:</em> 3 min lopen<br /><a
+                    href="https://www.google.com/maps/search/Oude+Stadhuis+Brno"
+                    target="_blank"
+                    >Google Maps</a
+                  >
+                </div>
+  https://images.unsplash.com/photo-1695397347304-0f7168f86f72?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3ODM4ODR8MHwxfHNlYXJjaHwyfHxDYXB1Y2hpbiUyMENyeXB0fGVufDB8fHx8MTc1MzYzOTg4MHww&ixlib=rb-4.1.0&q=80&w=1080                 src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Brno%2C_Kapucinska_krypta%2C_mumie_01.jpg"
+                  alt="Capuchin Crypt"
+                />
+                <div>
+                  <strong>Capuchin Crypt</strong> – Unieke crypte met
+                  gemummificeerde monniken.<br /><em>Afstand:</em> 0,2 km vanaf
+                  Hotel Royal Ricc<br /><em>Vervoer:</em> 3 min lopen<br /><a
+                    href="https://www.google.com/maps/search/Capuchin+Crypt+Brnhttps://images.unsplash.com/photo-1676768310070-f71e44192000?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3ODM4ODR8MHwxfHNlYXJjaHwyfHxTdC4lMjBQZXRlciUyMGVuJTIwUGF1bCUyMEthdGhlZHJhYWx8ZW58MHx8fHwxNzUzNjM5ODk0fDA&ixlib=rb-4.1.0&q=80&w=1080   </div>
+              </li>
+              <li>
+                <img
+                  class="tip-img"
+                  src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Katedrala_sv_Petra_a_Pavla%2C_Brno%2C_Czech_Republic.jpg"
+                  alt="St. Peter en Paul Kathedraal"
+                />
+                <div>
+                  <strong>St. Peter en Paul Kathedraal</strong> – Indrukwekkende
+                  kathedraal op een heuvel.<br /><em>Afstand:</em> 0,4 km vanaf
+                  Hotel Royal Ricc<br /><em>Vervoer:</em> 5 min lopen<br /><a
+                    href="https://www.google.com/maps/search/St+Peter+en+Paul+Kathedraal+Brno"
+                    target="_blank"
+                    >Google Maps</a
+                  >
+                </div>
+              </li>
+              <li>
+                <img
+                  class="tip-img"
+                  src="https://c8.alamy.com/comp/2AH9RHY/the-macocha-abyss-also-known-as-the-macocha-gorge-is-a-sinkhole-in-the-moravian-karst-cave-system-of-the-czech-republic-located-north-of-the-city-of-2AH9RHY.jpg"
+                  alt="Macocha Gorge"
+                />
+                <div>
+                  <strong>Macocha Gorge</strong> – Spectaculaire kloof en
+                  natuurgebied, dagtocht.<br /><em>Afstand:</em> 30 km vanaf
+                  Hotel Royal Ricc<br /><em>Vervoer:</em> 1-1,5 uur OV
+                  (trein+bus)<br /><a
+                    href="https://www.google.com/maps/search/Macocha+Gorge+Moravian+Karst"
+                    target="_blank"
+                    >Google Maps</a
+                  >
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Dag 3 -->
+        <div class="day">
+          <div class="day-marker"></div>
+          <div class="day-content stay-day">
+            <div class="day-header">
+              <div class="day-title">Dag 3 - Praag</div>
+              <div class="day-date">Woensdag 30 juli 2025</div>
+            </div>
+
+            <div class="accommodation">
+              🏨 <strong>Hotel Victoria</strong>
+              <span class="transport stay">🛏️ VERBLIJF</span>
+            </div>
+          </div>
+          <div class="tips">
+            <h4>Uitstappen & Tips</h4>
+            <ul>
+              <li>
+                <img
+                  class="tip-img"
+                  src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4np6isxRL3jZAGDMW-Qy5wlvL8e-1S0-5GiIN8rFKJ9BEvH9eqb5LezJY8Z-nZ8rxCqFsldSvHV4Kju4pETqtjPvsObq-jaiTermuhuPvPmPqx0qFdwEg-7Em7DrK6SCvdC8i1pR=s1360-w1360-h1020-rw"
+                  alt="Kasteel van Český Krumlov"
+                />
+                <div>
+                  <strong>Kasteel van Český Krumlov</strong> – Sprookjesachtig
+                  kasteel met uitzicht over de stad.<br /><em>Afstand:</em> 0,3
+                  km vanaf Penziohttps://images.unsplash.com/photo-1612927713912-5c1a9804593a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3ODM4ODR8MHwxfHNlYXJjaHwyfHxFZ29uJTIwU2NoaWVsZSUyMEFydCUyMENlbnRydW18ZW58MHx8fHwxNzUzNjM5OTEwfDA&ixlib=rb-4.1.0&q=80&w=1080om/maps/search/Kasteel+Cesky+Krumlov"
+                    target="_blank"
+                    >Google Maps</a
+                  >
+                </div>
+              </li>
+              <li>
+                <img
+                  class="tip-img"
+                  src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Egon_Schiele_Art_Centrum%2C_Cesky_Krumlov.jpg"
+                  alt="Egon Schiele Art Centrum"
+                />
+                <div>
+                  <strong>Egon Schiele Art Centruhttps://images.unsplash.com/photo-1752062467388-a1c140c9f052?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3ODM4ODR8MHwxfHNlYXJjaHwxfHxNdXNldW0lMjBGb3RvYXRlbGllciUyMFNlaWRlbHxlbnwwfHx8fDE3NTM2Mzk5Mzh8MA&ixlib=rb-4.1.0&q=80&w=1080af Penzion
+                  Kozák<br /><em>Vervoer:</em> 4 min lopen<br /><a
+                    href="https://www.google.com/maps/search/Egon+Schiele+Art+Centrum+Cesky+Krumlov"
+                    target="_blank"
+                    >Google Maps</a
+                  >
+                </div>
+              </li>
+              <li>
+                <img
+                  class="tip-img"
+                  src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Fotoatelier_Seidel%2C_Cesky_Krumlov.jpg"
+                  alt="Museum Fotoatelier Seidel"
+                />
+                <div>
+                  <strong>Museum Fotoatelier Seidel</strong> – Historisch
+                  fotomuseum.<br /><em>Afstand:</em> 0,5 km vanaf Penzion
+                  Kozák<br /><em>Vervoer:</em> 6 min lopen<br /><a
+                    href="https://www.google.com/maps/search/Museum+Fotoatelier+Seidel+Cesky+Krumlov"
+                    target="_blank"
+                    >Google Maps</a
+                  >
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Dag 4 -->
+        <div class="day">
+          <div class="day-marker"></div>
+          <div class="day-content travel-day">
+            <div class="day-header">
+              <div class="day-title">Dag 4 - Praag naar Brno</div>
+              <div class="day-date">Donderdag 31 juli 2025</div>
+            </div>
+
+            <div class="route">
+              <div>
+                <span class="time">09:42</span>
+                <span class="station">Vertrek Praag</span> → Brno
+                <span class="transport train">🚄 EC 277</span>
+              </div>
+              <div class="details">Wagon 368, plaatsen 54,55,56,57</div>
+              <div>
+                <span class="time">12:19</span>
+                <span class="station">Aankomst Brno</span>
+              </div>
+            </div>
+
+            <div class="accommodation">
+              🏨 <strong>Royal Ricc</strong>, Starobrnenská 10<br />
+              <em>Check-in vanaf 14:00, receptie 24u open</em>
+            </div>
+
+            <div class="photo-gallery">
+              <div class="photo-item">
+                <a
+                  href="https://www.google.com/search?tbm=isch&q=Royal+Ricc+Hotel+Brno+Royal+Ricc+Hotel"
+                  target="external"
+                >
+                  <img
+                    src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqSXZYzWXqRs8o7oJxxb499rA_sq5xujmgYzGvBC765PN4pNbvJrjvCPbqIHhFcaG_6r7V520qmR2gloEu_19nFY9iRri2RbjdREathFVImvPkFKHF-XHmTrSapRuskScCh2qVR=s1360-w1360-h1020-rw"
+                    alt="Royal Ricc Hotel Brno"
+                  />
+                </a>
+                <div class="photo-caption">Royal Ricc Hotel</div>
+              </div>
+              <div class="photo-item">
+                <a
+                  href="https://www.google.com/search?tbm=isch&q=Spilberk+Castle+Brno+Kasteel+Špilberk"
+                  target="external"
+                >
+                  <img
+                    src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4nrpvNPPjv1LYkLIulj0sjW6ze2CQP0zQCrFW6B90EUUwFgZhucXUyLZyKVWOPR44bI4v8jzqfqDMmjGXtwz770VqEIW_IYNCh4ZF2WACXO6dx-yMwoL_Y8LkNavk5zUw2I7cg8=s1360-w1360-h1020-rw"
+                    alt="Spilberk Castle Brno"
+                  />
+                </a>
+                <div class="photo-caption">Kasteel Špilberk</div>
+              </div>
+            </div>
+          </div>
+          <div class="tips">
+            <h4>Uitstappen & Tips</h4>
+            <ul>
+              <li>
+                <img
+                  class="tip-img"
+                  src="https://www.vltava-river.com/media/upload/activity/4b/d9/4bd9e155-0760-405c-a330-a998b1261b66.jpeg?p=gallery-full&s=08aefd9131764fd09849e0d434020702"
+                  alt="Uitkijktoren Boubín"
+                />
+                <div>
+                  <strong>Wandeling naar uitkijktoren Boubín</strong> – Mooie
+                  boswandeling naar een uitkijktoren.<br /><em>Afstand:</em> ca.
+                  5-6 km vanaf Hotel Kristian<br /><em>Vervoer:</em> Te voet,
+                  3-4 uur retour<br /><a
+                    href="https://www.google.com/maps/search/Oude+Stad+Cesky+Krumlov"
+                    target="_blank"
+                    >Google Maps</a
+                  >
+                </div>
+              </li>
+              <li>
+                <img
+                  class="tip-img"
+                  src="https://petrfaltus.net/petr-faltus-fotografie-vylet.php?order=1&track=kubova-hut-horni-vltavice&type=hike"
+                  alt="Horní Vltavice wandeling"
+                />
+                <div>
+                  <strong>Wandeling lus langs Horní Vltavice</strong> –
+                  Afwisselende wandeling door natuur en dorpjes.<br /><em
+                    >Afstand:</em
+                  >
+                  ca. 5 km vanaf Hotel Kristian<br /><em>Vervoer:</em> Te voet,
+                  3-4 uur<br /><a
+                    href="https://www.google.com/maps/search/Vltava+Rivier+Cesky+Krumlov"
+                    target="_blank"
+                    >Google Maps</a
+                  >
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Dag 5 -->
+        <div class="day">
+          <div class="day-marker"></div>
+          <div class="day-content stay-day">
+            <div class="day-header">
+              <div class="day-title">Dag 5 - Brno & Macocha Gorge</div>
+              <div class="day-date">Vrijdag 1 augustus 2025</div>
+            </div>
+
+            <div class="accommodation">
+              🏨 <strong>Royal Ricc</strong>
+              <span class="transport stay">🛏️ VERBLIJF</span>
+            </div>
+
+            <div class="activities">
+              🥾 <strong>Activiteiten:</strong> Macocha Gorge<br />
+              🚄 S2 naar Blansko → 🚌 Bus 232 naar Vilemovice →
+              <span class="transport walk">🚶‍♂️ WANDELING</span><br />
+              <em>Route beschikbaar op Komoot</em>
+            </div>
+
+            <div class="photo-gallery">
+              <div class="photo-item">
+                <a
+                  href="https://www.google.com/search?tbm=isch&q=Macocha+Gorge+Macocha+Gorge"
+                  target="external"
+                >
+                  <img
+                    src="https://c8.alamy.com/comp/2AH9RHY/the-macocha-abyss-also-known-as-the-macocha-gorge-is-a-sinkhole-in-the-moravian-karst-cave-system-of-the-czech-republic-located-north-of-the-city-of-2AH9RHY.jpg"
+                    alt="Macocha Gorge"
+                  />
+                </a>
+                <div class="photo-caption">Macocha Gorge</div>
+              </div>
+              <div class="photo-item">
+                <a
+                  href="https://www.google.com/search?tbm=isch&q=Moravian+Karst+Moravian+Karst"
+                  target="external"
+                >
+                  <img
+                    src="https://moravsky-kras.caves.cz/sites/caves.cz/files/styles/photogallery/public/2023-02/Punkevni2.jpg?itok=LBCn7PRa"
+                    alt="Moravian Karst"
+                  />
+                </a>
+                <div class="photo-caption">Moravian Karst</div>
+              </div>
+            </div>
+          </div>
+          <!-- tips verplaatst naar Dag 11 -->
+        </div>
+
+        <!-- Dag 6 -->
+        <div class="day">
+          <div class="day-marker"></div>
+          <div class="day-content travel-day">
+            <div class="day-header">
+              <div class="day-title">Dag 6 - Brno naar Český Krumlov</div>
+              <div class="day-date">Zaterdag 2 augustus 2025</div>
+            </div>
+
+            <div class="route">
+              <div>
+                <span class="time">09:15</span>
+                <span class="station"
+                  >Vertrek Brno (Benešova - Grandhotel/Hlavní nádraží)</span
+                >
+                <span class="transport bus">🚌 FLIXBUS</span>
+              </div>
+              <div>
+                <span class="time">13:30</span>
+                <span class="station">Aankomst Český Krumlov</span>
+              </div>
+            </div>
+
+            <div class="accommodation">
+              🏨 <strong>Penzion Kozák</strong>, Parkán 123<br />
+              <em>⚠️ Accepteert alleen CASH!</em>
+            </div>
+
+            <div class="activities">
+              🏰 <strong>Activiteiten:</strong> Kasteel bezoeken
+            </div>
+
+            <div class="photo-gallery">
+              <div class="photo-item">
+                <a
+                  href="https://www.google.com/search?tbm=isch&q=Penzion+Kozak+Penzion+Kozák"
+                  target="external"
+                >
+                  <img
+                    src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4npQMhm2BYfUWUGPdOmSDolFUgFep6Y71A1cDahvtD1rR3lGqBq8VEslgnY5rB7pbpTfrdPPRBslROra9k35kYep69Y7rQo-AgEXfqH3v1j6BvtprebbwqIquehzfoXradY2CfZq=s1360-w1360-h1020-rw"
+                    alt="Penzion Kozak"
+                  />
+                </a>
+                <div class="photo-caption">Penzion Kozák</div>
+              </div>
+              <div class="photo-item">
+                <a
+                  href="https://www.google.com/search?tbm=isch&q=Cesky+Krumlov+Castle+Kasteel+Český+Krumlov"
+                  target="external"
+                >
+                  <img
+                    src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4np6isxRL3jZAGDMW-Qy5wlvL8e-1S0-5GiIN8rFKJ9BEvH9eqb5LezJY8Z-nZ8rxCqFsldSvHV4Kju4pETqtjPvsObq-jaiTermuhuPvPmPqx0qFdwEg-7Em7DrK6SCvdC8i1pR=s1360-w1360-h1020-rw"
+                    alt="Cesky Krumlov Castle"
+                  />
+                </a>
+                <div class="photo-caption">Kasteel Český Krumlov</div>
+              </div>
+              <div class="photo-item">
+                <a
+                  href="https://www.google.com/search?tbm=isch&q=Cesky+Krumlov+Old+Town+Oude+Stad"
+                  target="external"
+                >
+                  <img
+                    src="https://3seaseurope.com/wp-content/uploads/2023/01/krumlov-2-1024x680.webp"
+                    alt="Cesky Krumlov Old Town"
+                  />
+                </a>
+                <div class="photo-caption">Oude Stad</div>
+              </div>
+            </div>
+          </div>
+          <div class="tips">
+            <h4>Uitstappen & Tips</h4>
+            <ul>
+              <li>
+                <img class="tip-img" src="https://lh3.googleuserhttps://images.unsplash.com/photo-1612927713912-5c1a9804593a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3ODM4ODR8MHwxfHNlYXJjaHwyfHxFZ29uJTIwU2NoaWVsZSUyMEFydCUyMENlbnRydW18ZW58MHx8fHwxNzUzNjM5OTEwfDA&ixlib=rb-4.1.0&q=80&w=1080BEvH9eqb5LezJY8Z-nZ8rxCqFsldSvHV4Kju4pETqtjPvsObq-jaiTermuhuPvPmPqx0qFdwEg-7Em7DrK6SCvdC8i1pR=s1360-w1360-h1020-rw" alt="Kasteel van Český Krumlov" />
+                <div>
+                  <strong>Kasteel van Český Krumlov</strong> – Sprookjesachtig kasteel met uitzicht over de stad.<https://images.unsplash.com/photo-1752062467388-a1c140c9f052?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3ODM4ODR8MHwxfHNlYXJjaHwxfHxNdXNldW0lMjBGb3RvYXRlbGllciUyMFNlaWRlbHxlbnwwfHx8fDE3NTM2Mzk5Mzh8MA&ixlib=rb-4.1.0&q=80&w=1080<em>Vervoer:</em> 4 min lopen<br><a href="https://www.google.com/maps/search/Kasteel+Cesky+Krumlov" target="_blank">Google Maps</a>
+                </div>
+              </li>
+              <li>
+                <img class="tip-img" src="https://www.schieleartcentrum.cz/images/egon-schiele-art-centrum.jpg" alt="Egon Schiele Art Centrum" />
+                <div>
+                  <strong>Egon Schiele Art Centrum</strong> – Museum voor moderne kunst.<br><em>Afstand:</em> 0,3 km vanaf Penzion Kozák<br><em>Vervoer:</em> 4 min lopen<br><a href="https://www.google.com/maps/search/Egon+Schiele+Art+Centrum+Cesky+Krumlov" target="_blank">Google Maps</a>
+                </div>
+              </li>
+              <li>
+                <img class="tip-img" src="https://www.seidel.cz/images/fotoatelier-seidel.jpg" alt="Museum Fotoatelier Seidel" />
+                <div>
+                  <strong>Museum Fotoatelier Seidel</strong> – Historisch fotomuseum.<br><em>Afstand:</em> 0,5 km vanaf Penzion Kozák<br><em>Vervoer:</em> 6 min lopen<br><a href="https://www.google.com/maps/search/Museum+Fotoatelier+Seidel+Cesky+Krumlov" target="_blank">Google Maps</a>
+                </div>
+              </li>
+              <li>
+                <img class="tip-img" src="https://3seaseurope.com/wp-content/uploads/2023/01/krumlov-2-1024x680.webp" alt="Oude Stad Český Krumlov" />
+                <div>
+                  <strong>Oude Stad</strong> – Historisch centrum met kleurrijke huizen en gezellige straatjes.<br><em>Afstand:</em> 0,2 km vanaf Penzion Kozák<br><em>Vervoer:</em> 3 min lopen<br><a href="https://www.google.com/maps/search/Oude+Stad+Cesky+Krumlov" target="_blank">Google Maps</a>
+                </div>
+              </li>
+              <li>
+                <img class="tip-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Prague_skyline_view.jpg/1200px-Prague_skyline_view.jpg" alt="Vltava Rivier" />
+                <div>
+                  <strong>Vltava Rivier</strong> – Mogelijkheid tot kajakken of boottocht.<br><em>Afstand:</em> 0,4 km vanaf Penzion Kozák<br><em>Vervoer:</em> 5 min lopen<br><a href="https://www.google.com/maps/search/Vltava+Rivier+Cesky+Krumlov" target="_blank">Google Maps</a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Dag 7 -->
+        <div class="day">
+          <div class="day-marker"></div>
+          <div class="day-content stay-day">
+            <div class="day-header">
+              <div class="day-title">Dag 7 - Český Krumlov</div>
+              <div class="day-date">Zondag 3 augustus 2025</div>
+            </div>
+
+            <div class="accommodation">
+              🏨 <strong>Penzion Kozák</strong>
+              <span class="transport stay">🛏️ VERBLIJF</span>
+            </div>
+
+            <div class="activities">
+              🛒 <strong>To Do:</strong> Voorraad eten inslaan voor volgende
+              dagen<br />
+              🛶 <strong>Activiteiten:</strong> Kajakken of boottocht
+            </div>
+
+            <div class="photo-gallery">
+              <div class="photo-item">
+                <a
+                  href="https://www.google.com/search?tbm=isch&q=Vltava+River+Kayaking+Vltava+Rivier"
+                  target="external"
+                >
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Prague_skyline_view.jpg/1200px-Prague_skyline_view.jpg"
+                    alt="Vltava River Kayaking"
+                  />
+                </a>
+                <div class="photo-caption">Vltava Rivier</div>
+              </div>
+              <div class="photo-item">
+                <a
+                  href="https://www.google.com/search?tbm=isch&q=Cesky+Krumlov+from+above+Uitzicht+over+de+stad"
+                  target="external"
+                >
+                  <img
+                    src="https://www.hoteloldinn.cz/userfiles/cesky-krumlov-ed5ac391.jpg"
+                    alt="Cesky Krumlov from above"
+                  />
+                </a>
+                <div class="photo-caption">Uitzicht over de stad</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dag 8 -->
+        <div class="day">
+          <div class="day-marker"></div>
+          <div class="day-content travel-day">
+            <div class="day-header">
+              <div class="day-title">Dag 8 - Český Krumlov naar Kubova Hut</div>
+              <div class="day-date">Maandag 4 augustus 2025</div>
+            </div>
+
+            <div class="warning">🎫 <strong>TICKETS KOPEN!</strong></div>
+
+            <div class="route">
+              <div>
+                <span class="time">08:33</span>
+                <span class="station">Vertrek Český Krumlov</span> → Nove Udoli
+                <span class="transport train">🚄 Os 8143</span>
+              </div>
+
+              <div>
+                <span class="time">10:25</span>
+                <span class="station">Černý Kříž</span> → Volary & Číčenice
+                <span class="transport train">🚄 Os 18007</span>
+              </div>
+              <div class="details">12 min overstaptijd</div>
+
+              <div>
+                <span class="time">10:44</span>
+                <span class="station">Volary</span> → Strakonice
+                <span class="transport train">🚄 Os 18109</span>
+              </div>
+              <div class="details">12 min overstaptijd</div>
+
+              <div>
+                <span class="time">11:17</span>
+                <span class="station">Aankomst Kubova Hut</span>
+              </div>
+            </div>
+
+            <div class="accommodation">
+              🏨 <strong>Hotel Kristian</strong>, Kubova Hut 26
+            </div>
+
+            <div class="photo-gallery">
+              <div class="photo-item">
+                <a
+                  href="https://www.google.com/search?tbm=isch&q=Hotel+Kristian+Kubova+Hut+Hotel+Kristian"
+                  target="external"
+                >
+                  <img
+                    src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4npFG2BdFqDXY89XYYfyZLqdZu5oM-59sjnmIQ--cYUwlEaVpCCuQl6EkYHXAMqKKSqhMbqs2BMbR4EWhjrPFPCIaMr8EAOaXw-8hmlNGE0jL3C1e6tynK9FHS4jlxoXIe-2l6vO=s1360-w1360-h1020-rw"
+                    alt="Hotel Kristian Kubova Hut"
+                  />
+                </a>
+                <div class="photo-caption">Hotel Kristian</div>
+              </div>
+              <div class="photo-item">
+                <a
+                  href="https://www.google.com/search?tbm=isch&q=Bohemian+Forest+Bohemian+Forest"
+                  target="external"
+                >
+                  <img
+                    src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop"
+                    alt="Bohemian Forest"
+                  />
+                </a>
+                <div class="photo-caption">Bohemian Forest</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dag 9 -->
+        <div class="day">
+          <div class="day-marker"></div>
+          <div class="day-content stay-day">
+            <div class="day-header">
+              <div class="day-title">Dag 9 - Kubova Hut Wandelingen</div>
+              <div class="day-date">Dinsdag 5 augustus 2025</div>
+            </div>
+
+            <div class="accommodation">
+              🏨 <strong>Hotel Kristian</strong>
+              <span class="transport stay">🛏️ VERBLIJF</span>
+            </div>
+
+            <div class="activities">
+              🥾 <strong>Wandelingen:</strong><br />
+              • Uitkijktoren Boubin - 11 km
+              <span class="transport walk">🚶‍♂️https://images.unsplash.com/photo-1670366733019-c5e307d3c32a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3ODM4ODR8MHwxfHNlYXJjaHwxfHxIb3JuJUMzJUFEJTIwVmx0YXZpY2UlMjB3YW5kZWxpbmd8ZW58MHx8fHwxNzUzNjM5OTgyfDA&ixlib=rb-4.1.0&q=80&w=1080             <span class="transport walk">🚶‍♂️ WANDELING</span><br />
+              <em>Routes beschikbaar op Komoot</em>
+            </div>
+
+            <div class="tips">
+              <h4>Uitstappen & Tips</h4>
+              <ul>
+                <li>
+                  <img class="tip-img" src="https://www.vltavhttps://images.unsplash.com/photo-1742661388601-fdf14ba9f2db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3ODM4ODR8MHwxfHNlYXJjaHwxfHxCb3NwYWR8ZW58MHx8fHwxNzUzNjM5OTk0fDA&ixlib=rb-4.1.0&q=80&w=1080b66.jpeg?p=gallery-full&s=08aefd9131764fd09849e0d434020702" alt="Uitkijktoren Boubin" />
+                  <div>
+                    <strong>Uitkijktoren Boubin</strong> – Mooie boswandeling naar een uitkijktoren.<br><em>Afstand:</em> ca. 5-6 km vanaf Hotel Kristian<br><em>Vervoer:</em> Te voet, 3-4 uur retour<br><a href="https://www.google.com/maps/search/Uitkijktoren+Boubin" target="_blank">Google Maps</a>
+                  </div>
+                </li>
+                <li>
+                  <img class="tip-img" src="https://www.sumavanet.cz/img/obec/horni-vltavice/horni-vltavice-uvodni.jpg" alt="Horní Vltavice wandeling" />
+                  <div>
+                    <strong>Wandeling lus langs Horní Vltavice</strong> – Afwisselende wandeling door natuur en dorpjes.<br><em>Afstand:</em> ca. 5 km vanaf Hotel Kristian<br><em>Vervoer:</em> Te voet, 3-4 uur<br><a href="https://www.google.com/maps/search/Horni+Vltavice" target="_blank">Google Maps</a>
+                  </div>
+                </li>
+                <li>
+                  <img class="tip-img" src="https://www.npsumava.cz/wp-content/uploads/2020/06/boubinsky-prales-1.jpg" alt="Bospad" />
+                  <div>
+                    <strong>Bospad</strong> – Rustige wandeling door het Boheemse woud.<br><em>Afstand:</em> 2 km vanaf Hotel Kristian<br><em>Vervoer:</em> Te voet, 1 uur<br><a href="https://www.google.com/maps/search/Bospad+Boheems+woud" target="_blank">Google Maps</a>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="photo-gallery">
+              <div class="photo-item">
+                <a href="https://www.google.com/search?tbm=isch&q=Boubin+Tower+Uitkijktoren+Boubin" target="external">
+                  <img src="https://www.vltava-river.com/media/upload/activity/4b/d9/4bd9e155-0760-405c-ahttps://images.unsplash.com/photo-1696112552768-42913a2d9a22?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3ODM4ODR8MHwxfHNlYXJjaHwxfHxNbCVDMyVCRG5zayVDMyVBMSUyMEtvbG9ubiVDMyVBMWRhfGVufDB8fHx8MTc1MzY0MDAwN3ww&ixlib=rb-4.1.0&q=80&w=1080/>
+                </a>
+                <div class="photo-caption">Uitkijktoren Boubin</div>
+              </div>
+              <div class="photo-item">
+                <a href="https://www.google.com/search?tbm=isch&q=Horno+Vltavice+Horno+Vltavice" target="external">
+                  <img src="https://petrfaltus.net/petr-faltus-fotografie-vylet.phphttps://images.unsplash.com/photo-1745763162811-9c0fd0e1c029?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3ODM4ODR8MHwxfHNlYXJjaHwzfHxEaWFuYSUyMFVpdGtpamt0b3JlbnxlbnwwfHx8fDE3NTM2NDAwMjB8MA&ixlib=rb-4.1.0&q=80&w=1080     </a>
+                <div class="photo-caption">Horní Vltavice</div>
+              </div>
+              <div class="photo-item">
+                <a href="https://www.google.com/search?tbm=isch&q=Forest+Trail+Bospad" target="external">
+                  <img src="https://petrfaltus.net/petr-faltus-fotografie-vylet.php?ohttps://images.unsplash.com/photo-1724338956225-0a66a8fe7da9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3ODM4ODR8MHwxfHNlYXJjaHwxfHxHbGFzZmFicmllayUyME1vc2VyfGVufDB8fHx8MTc1MzY0MDAzNnww&ixlib=rb-4.1.0&q=80&w=1080/a>
+                <div class="photo-caption">Bospad</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+              <!-- tips verplaatst naar Dag 11 -->
+          <div class="tips">
+            <h4>Uitstappen & Tips</h4>
+            <ul>
+              <li>
+                <img class="tip-img" src="https://uhttps://images.unsplash.com/photo-1735914778489-8735e23adf4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3ODM4ODR8MHwxfHNlYXJjaHwyfHxPcnRob2RveGUlMjBLZXJrJTIwdmFuJTIwU3QuJTIwUGV0ZXIlMjBlbiUyMFBhdWx8ZW58MHx8fHwxNzUzNjQwMDQ5fDA&ixlib=rb-4.1.0&q=80&w=1080              <div>
+                  <strong>Wandeling langs de Kolonnades & Warmwaterbronnen</strong> – Wandelroute langs de beroemde kolonnades en bronnen.<br><em>Afstand:</em> 0,9 km vanaf Hotel Kavalir<br><em>Vervoer:</em> 11 min lopen<br><a href="https://www.google.com/maps/search/Kolonnades+Warmwaterbronnen+Karlovy+Vary" target="_blank">Google Maps</a>
+                </div>
+              </li>
+              <li>
+                <img class="tip-img" src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Diana_tower_Karlovy_Vary_2012_2.jpg" alt="Diana Uitkijktoren" />
+                <div>
+                  <strong>Diana Uitkijktoren</strong> – Uitkijktoren bereikbaar per kabelbaan.<br><em>Afstand:</em> 1,4 km vanaf Hotel Kavalir<br><em>Vervoer:</em> 18 min lopen + kabelbaan<br><a href="https://www.google.com/maps/search/Diana+Uitkijktoren+Karlovy+Vary" target="_blank">Google Maps</a>
+                <https://images.unsplash.com/photo-1753452373348-14df25f95bdf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3ODM4ODR8MHwxfHNlYXJjaHwzfHxLYXJsb3Z5JTIwVmFyeSUyMENvbG9ubmFkZXxlbnwwfHx8fDE3NTM2NDAwNjB8MA&ixlib=rb-4.1.0&q=80&w=1080/sites/default/files/styles/galerie/public/2020-01/moser-1.jpg" alt="Glasfabriek Moser" />
+                <div>
+                  <strong>Bezoek aan glasfabriek Moser</strong> – Rondleiding in beroemde glasfabriek.<br><em>Afstand:</em> 3,5 km vanaf Hotel Kavalir<br><em>Vervoer:</em> 45 min lopen of 15-20 min OV<br><a href="https://www.google.com/maps/search/Glasfabriek+Moser+Karlovy+Vary" target="_blank">Google Maps</a>
+                </div>
+              </li>
+              <li>
+                <img class="tip-img" src="https://upload.wikimedia.org/wikipedia/commons/3/3e/Orthodox_church_of_Saints_Peter_and_Paul%2C_Karlovy_Vary_2.jpg" alt="Orthodoxe Kerk van St. Peter en Paul" />
+                <div>
+                  <strong>Orthodoxe Kerk van St. Peter en Paul</strong> – Prachtige orthodoxe kerk.<br><em>Afstand:</em> 0,8 km vanaf Hotel Kavalir<br><em>Vervoer:</em> 10 min lopen<br><a href="https://www.google.com/maps/search/Orthodoxe+Kerk+St+Peter+Paul+Karlovy+Vary" target="_blank">Google Maps</a>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="photo-gallery">
+            <div class="photo-item">
+              <a href="https://www.google.com/maps/search/Hotel+Kavalir+Karlovy+Vary" target="external">
+                <img src="https://lh3.googleusercontent.com/p/AF1QipPWNZ_p4ZBoVwr-EP8SQZ8ln2gDrpJEG6sfP41H=s1360-w1360-h1020-rw" alt="Hotel Kavalir Karlovy Vary" />
+              </a>
+              <div class="photo-caption">Hotel Kavalir</div>
+            </div>
+            <div class="photo-item">
+              <a href="https://www.google.com/maps/search/Mill+Colonnade+Karlovy+Vary" target="external">
+                <img src="https://r.profitroom.pl/carlsbadplazamedicalspawellnesshotel/images/attractions/1685103326.carlsbad_atrakce_05.jpg" alt="Karlovy Vary Colonnade" />
+              </a>
+              <div class="photo-caption">Mill Colonnade</div>
+            </div>
+            <div class="photo-item">
+              <a href="https://www.google.com/maps/search/Thermal+Springs+Karlovy+Vary" target="external">
+                <img src="https://thermal.saunia.cz/wp-content/themes/thermal/images/foto/vridlo.jpg" alt="Karlovy Vary Hot Springs" />
+              </a>
+              <div class="photo-caption">Thermale Bronnen</div>
+            </div>
+          </div>
+          </div>
+        </div>
+
+        <!-- Dag 11 -->
+        <div class="day">
+          <div class="day-marker"></div>
+          <div class="day-content stay-day">
+            <div class="day-header">
+              <div class="day-title">Dag 11 - Karlovy Vary</div>
+              <div class="day-date">Donderdag 7 augustus 2025</div>
+            </div>
+
+            <div class="accommodation">
+              🏨 <strong>Hotel Kavalir</strong>
+              <span class="transport stay">🛏️ VERBLIJF</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dag 12 -->
+        <div class="day">
+          <div class="day-marker"></div>
+          <div class="day-content travel-day">
+            <div class="day-header">
+              <div class="day-title">Dag 12 - Karlovy Vary naar Leipzig</div>
+              <div class="day-date">Vrijdag 8 augustus 2025</div>
+            </div>
+
+            <div class="route">
+              <div>
+                <span class="time">10:49</span>
+                <span class="station">Vertrek Karlovy Vary</span> → Cheb
+                <span class="transport train">🚄 R 616</span>
+              </div>
+
+              <div>
+                <span class="time">12:05</span>
+                <span class="station">Cheb</span> → Zwickau
+                <span class="transport train">🚄 Os 20986</span>
+              </div>
+              <div class="details">31 min overstaptijd</div>
+
+              <div>
+                <span class="time">14:13</span>
+                <span class="station">Werdau</span> → Leipzig & Halle
+                <span class="transport train">🚄 S 37522</span>
+              </div>
+              <div class="details">11 min overstaptijd</div>
+
+              <div>
+                <span class="time">15:11</span>
+                <span class="station">Aankomst Leipzig</span>
+              </div>
+            </div>
+
+            <div class="accommodation">
+              🏨 <strong>Hotel H2 Leipzig</strong>, Sachsenseite 5, Mitte
+            </div>
+
+            <div class="activities">
+              🎨 <strong>Activiteiten:</strong> Kunstkraftwerk bezoeken
+            </div>
+
+            <div class="photo-gallery">
+              <div class="photo-item">
+                <a
+                  href="https://www.google.com/search?tbm=isch&q=Hotel+H2+Leipzig+Hotel+H2+Leipzig"
+                  target="external"
+                >
+                  <img
+                    src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/267274144.jpg?k=acdb5663447eed13660c75d611b3788eb876d80eccd6886e01b720a905dcafe3&o=&hp=1"
+                    alt="Hotel H2 Leipzig"
+                  />
+                </a>
+                <div class="photo-caption">Hotel H2 Leipzig</div>
+              </div>
+              <div class="photo-item">
+                <a
+                  href="https://www.google.com/search?tbm=isch&q=Kunstkraftwerk+Leipzig+Kunstkraftwerk"
+                  target="external"
+                >
+                  <img
+                    src="https://www.mdr.de/kultur/sachsen/origins-kunstkraftwerk-leipzig-ausstellung-106_v-variantBig16x9_w-576_zc-915c23fa.jpg?version=16534"
+                    alt="Kunstkraftwerk Leipzig"
+                  />
+                </a>
+                <div class="photo-caption">Kunstkraftwerk</div>
+              </div>
+              <div class="photo-item">
+                <a
+                  href="https://www.google.com/search?tbm=isch&q=Leipzig+Market+Square+Marktplein+Leipzig"
+                  target="external"
+                >
+                  <img
+                    src="https://d2dzi65yjecjnt.cloudfront.net/263246-4.jpg"
+                    alt="Leipzig Market Square"
+                  />
+                </a>
+                <div class="photo-caption">Marktplein Leipzig</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dag 13 -->
+        <div class="day">
+          <div class="day-marker"></div>
+          <div class="day-content travel-day">
+            <div class="day-header">
+              <div class="day-title">Dag 13 - Leipzig naar Huis</div>
+              <div class="day-date">Zaterdag 9 augustus 2025</div>
+            </div>
+
+            <div class="route">
+              <div>
+                <span class="time">08:48</span>
+                <span class="station">Vertrek Leipzig</span> → Frankfurt
+                <span class="transport train">🚄 ICE 595</span>
+              </div>
+              <div class="details">
+                Spoor 12, wagon 4, plaatsen 103,104,107,108
+              </div>
+
+              <div>
+                <span class="time">12:15</span>
+                <span class="station">Frankfurt</span> → Brussel
+                <span class="transport train">🚄 IC 314</span>
+              </div>
+              <div class="details">
+                Spoor 17, wagon 22, plaatsen 67,68,73,74 - 43 min overstaptijd
+              </div>
+
+              <div>
+                <span class="time">14:27</span>
+                <span class="station">Brussel</span> → Antwerpen
+                <span class="transport train">🚄 TREIN</span>
+              </div>
+              <div class="details">31 min overstaptijd</div>
+
+              <div>
+                <span class="time">15:40</span>
+                <span class="station">Brussel</span> → Antwerpen
+                <span class="transport train">🚄 TREIN</span>
+              </div>
+              <div class="details">Spoor 11 - 14 min overstaptijd</div>
+
+              <div>
+                <span class="time">16:48</span>
+                <span class="station">Antwerpen Berchem</span> → Antwerpen Zuid
+              </div>
+              <div class="details">26 min overstaptijd</div>
+
+              <div>
+                <span class="time">16:52</span>
+                <span class="station">Aankomst Antwerpen Zuid</span> 🏠
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="legend">
+        <div class="transport train">🚄 TREIN/RAILPASS</div>
+        <div class="transport bus">🚌 BUS/FLIXBUS</div>
+        <div class="transport walk">🚶‍♂️ WANDELING</div>
+        <div class="transport stay">🛏️ VERBLIJF</div>
+      </div>
+    </div>
+  </body>
+</html>
