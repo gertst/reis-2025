@@ -45,7 +45,7 @@
 
       .timeline {
         position: relative;
-        padding: 40px 20px;
+        padding: 40px 18px 40px 20px;
       }
 
       .timeline::before {
@@ -298,7 +298,7 @@
         }
         .day-content {
           margin-left: 18px;
-          padding: 10px;
+          padding: 10px 0;
           border-radius: 7px;
         }
         .day-marker {
@@ -1486,6 +1486,21 @@ document.addEventListener('DOMContentLoaded', function() {
     img.style.boxShadow = '0 0 32px #000';
     img.style.borderRadius = '8px';
     overlay.appendChild(img);
+
+    // Voeg "tap om te sluiten" toe
+    const caption = document.createElement('div');
+    caption.textContent = '✦ Tap om te sluiten';
+    caption.style.position = 'absolute';
+    caption.style.bottom = '32px';
+    caption.style.left = '0';
+    caption.style.right = '0';
+    caption.style.textAlign = 'center';
+    caption.style.color = '#fff';
+    caption.style.fontSize = '1.1em';
+    caption.style.opacity = '0.85';
+    caption.style.letterSpacing = '0.03em';
+    caption.style.pointerEvents = 'none';
+    overlay.appendChild(caption);
 
     // Sluit bij klik
     overlay.addEventListener('click', function() {
