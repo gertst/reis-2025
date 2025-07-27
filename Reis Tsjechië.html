@@ -1649,4 +1649,49 @@
       </div>
     </div>
   </body>
+<script>
+// Fullscreen image viewer voor .tip-img
+document.addEventListener('DOMContentLoaded', function() {
+  function createFullscreenImg(src) {
+    // Maak overlay
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = 0;
+    overlay.style.left = 0;
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.background = 'rgba(0,0,0,0.95)';
+    overlay.style.display = 'flex';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+    overlay.style.zIndex = 9999;
+    overlay.style.cursor = 'zoom-out';
+
+    // Maak image
+    const img = document.createElement('img');
+    img.src = src;
+    img.style.maxWidth = '95vw';
+    img.style.maxHeight = '95vh';
+    img.style.boxShadow = '0 0 32px #000';
+    img.style.borderRadius = '8px';
+    overlay.appendChild(img);
+
+    // Sluit bij klik
+    overlay.addEventListener('click', function() {
+      document.body.removeChild(overlay);
+    });
+
+    document.body.appendChild(overlay);
+  }
+
+  document.querySelectorAll('img.tip-img').forEach(function(img) {
+    img.style.cursor = 'zoom-in';
+    img.addEventListener('click', function(e) {
+      e.stopPropagation();
+      createFullscreenImg(img.src);
+    });
+  });
+});
+</script>
+</body>
 </html>
